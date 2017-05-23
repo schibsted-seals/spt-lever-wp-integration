@@ -61,6 +61,8 @@ class SptJobOffer
             add_post_meta($this->postId, 'offerId', $this->id, true);
             add_post_meta($this->postId, '_job_location', $this->location, true);
             add_post_meta($this->postId, '_application', $this->applyUrl, true);
+            add_post_meta($this->postId, '_job_expires', $this->applyUrl, true);
+
             $this->setOfferSocialData();
             $this->setLocationTerm();
             $this->setCategoryTerm();
@@ -152,4 +154,6 @@ class SptJobOffer
         $my_query = new WP_Query($args);
         return !empty($my_query->have_posts());
     }
+
+
 }

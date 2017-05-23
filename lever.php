@@ -17,6 +17,7 @@ class SptLeverIntegration
     {
         include_once(plugin_dir_path(__FILE__) . '/includes/lever-api.php');
         include_once(plugin_dir_path(__FILE__) . '/includes/SptJobOffer.php');
+
         $this->lever = new LeverAPI();
         add_action('wp_login', array($this, 'lever_update'));
 
@@ -45,7 +46,7 @@ class SptLeverIntegration
     {
         if (post_type_exists($this->jobListingType)) {
             $offers = json_decode($this->lever->getOffers());
-
+            $this->delete_previous_jobs();
             foreach ($offers->data as $offer) {
                 $jobOffer = new SptJobOffer($offer);
                 $jobOffer->setOfferData();
@@ -53,6 +54,12 @@ class SptLeverIntegration
         }
     }
 
+    private function delete_previous_jobs(){
+        $jobs = get_posts( array( 'post_type' => $this->jobListingType, 'numberposts' => 500));
+        foreach( $jobs as $job ) {
+            wp_delete_post( $job->ID, true);
+        }
+    }
 }
 
 $SptLeverIntegration = new SptLeverIntegration();
