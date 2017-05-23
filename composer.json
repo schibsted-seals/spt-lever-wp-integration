@@ -1,4 +1,7 @@
 {
   "name": "spt-lever-wp-integration",
-  "type": "wordpress-plugin"
+  "type": "wordpress-plugin",
+  "require": {
+    "composer/installers": "~1.0"
+  }
 }
