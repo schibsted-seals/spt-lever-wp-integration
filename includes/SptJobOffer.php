@@ -54,7 +54,7 @@ class SptJobOffer
             'post_date' => $this->setCreatedDate(),
             'post_type' => 'job_listing',
             'post_title' => $this->title,
-            'post_content' => $this->description,
+            'post_content' => "<div class='spt-job-description'>".$this->description."</div>",
             'post_status' => 'publish'
         ));
         if ($this->postId) {
@@ -104,7 +104,7 @@ class SptJobOffer
     private function appendLists()
     {
         foreach ($this->lists as $list) {
-            $this->description .= "<br/><br/><strong>" . $list->text . "</strong>" . $list->content."<br/>";
+            $this->description .= "<div class='spt-offer-additional-list'><strong>" . $list->text . "</strong><ul>" . $list->content."</ul></div>";
         }
     }
 
