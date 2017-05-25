@@ -10,3 +10,58 @@
 .spt-offer-additional-list > ul {
     margin-top: -15px;
 }
+.sfol p, .fol p{
+    margin-bottom:20px; !important;
+}
+.sfol  input{
+    font-size:12px !important;
+    width:55% !important;
+    display:inline-block !important;
+}
+.sfol .wpcf7-file{
+    width:48% !important;
+    padding:0 !Important;
+    margin:0 !important;
+}
+
+.sfol .label-form{
+    width:45%;
+    display:inline-block;
+    text-align:right;
+    padding-right:8px;
+}
+.fol .label-form{
+    width: 100% !important;
+}
+.fol textarea{
+    resize:none;
+    height:100px !important;
+}
+.sfol .wpcf7-not-valid-tip{
+    padding-left:45% !important;
+    padding-top:4px !important;
+    font-size:11px !important;
+    display:initial !important;
+}
+
+.wpcf7-submit{
+    padding: 10px !important;
+    margin: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+}
+.pum-title .popmake-title{
+    font-size:26px !important;
+}
+
+.popmake-content .wpcf7-response-output{
+    overflow: hidden !important;
+    border: 0!important;
+    text-align: center !important;
+    display: block!important;
+    padding-top: 0!important;
+    margin-top: 0!important;
+}
