@@ -12,6 +12,7 @@ class SptJobOffer
     private $descriptionPlain;
     private $location;
     private $commitment;
+    private $department;
     private $team;
     private $title;
     private $url;
@@ -32,9 +33,10 @@ class SptJobOffer
         $this->commitment = $leverOffer->categories->commitment;
         $this->location = $leverOffer->categories->location;
         $this->team = $leverOffer->categories->team;
+        $this->department = $leverOffer->categories->department;
         $this->level = $leverOffer->categories->level;
         $this->lists = $leverOffer->content->lists;
-        $this->closing = $leverOffer->content->closing;
+        $this->closing = $leverOffer->content->closingHtml;
     }
 
     public function setOfferData()
@@ -54,7 +56,7 @@ class SptJobOffer
             'post_date' => $this->setCreatedDate(),
             'post_type' => 'job_listing',
             'post_title' => $this->title,
-            'post_content' => "<div class='spt-job-description'>".$this->description."</div>",
+            'post_content' => "<div class='spt-job-description'>" . $this->description . "</div><div>" . $this->closing . "</div>",
             'post_status' => 'publish'
         ));
         if ($this->postId) {
@@ -67,6 +69,7 @@ class SptJobOffer
             $this->setLocationTerm();
             $this->setCategoryTerm();
             $this->setTypeTerm();
+
         }
     }
 
@@ -104,18 +107,33 @@ class SptJobOffer
     private function appendLists()
     {
         foreach ($this->lists as $list) {
-            $this->description .= "<div class='spt-offer-additional-list'><strong>" . $list->text . "</strong><ul>" . $list->content."</ul></div>";
+            $this->description .= "<div class='spt-offer-additional-list'><strong>" . $list->text . "</strong><ul>" . $list->content . "</ul></div>";
         }
     }
 
     private function setCategoryTerm()
     {
-        $termString = 'job_listing_category';
-        $term = get_term_by('name', $this->team, $termString);
-        wp_set_object_terms($this->postId, $term->term_id, $termString, false);
+
+        if ($this->department != '' && $this->team != '') {
+            $termString = 'job_listing_category';
+            $cat = get_term_by('name', $this->department, $termString);
+            if (!$cat) {
+                wp_insert_term($this->department, $termString);
+                $cat = get_term_by('name', $this->department, $termString);
+            }
+
+            $subCat = get_term_by('name', $this->team, $termString);
+            if (!$subCat) {
+                wp_insert_term($this->team, $termString, array('parent' => $cat->term_id));
+                $subCat = get_term_by('name', $this->team, $termString);
+            }
+            wp_set_object_terms($this->postId, $subCat->term_id, $termString, false);
+        }
     }
 
-    private function setTypeTerm()
+
+    private
+    function setTypeTerm()
     {
         $termString = 'job_listing_type';
         $term = get_term_by('slug', $this->commitment, $termString);
@@ -130,6 +148,7 @@ class SptJobOffer
         add_post_meta($this->postId, '_company_website', 'http://www.schibsted.com/', true);
         add_post_meta($this->postId, '_company_twitter', '@SchibstedGroup', true);
         add_post_meta($this->postId, '_company_facebook', 'https://www.facebook.com/Schibsted-Media-Group-173757662663334/?fref=ts', true);
+
     }
 
     private
@@ -154,6 +173,5 @@ class SptJobOffer
         $my_query = new WP_Query($args);
         return !empty($my_query->have_posts());
     }
-
 
 }
